@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+        run: python3 -m pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
 
   generate_report:
     runs-on: ubuntu-latest
