@@ -1,0 +1,13 @@
+cadastro:
+  mensagem_cadastro_sucesso: From your account dashboard you can view your recent orders, manage your shipping and billing addresses and edit your password and account details.
+  usuario_padrao: leonardo71@example.org
+  senha_usuario_padrao: teste@teste
+  msg_alteracao_nome_sobrenome_sucesso: Account details changed successfully.
+  senha_padrao: Teste@teste123
+  country_shipping_addresses: Brazil
+  street_shipping_addresses: Avenida Brasil
+  city_shipping_addresses: São Paulo
+  mensagem_sucesso_shipping_address: Address changed successfully
+
+pagina_inicial:
+  titulo_da_pagina: Automation Practice Site
