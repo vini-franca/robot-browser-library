@@ -54,3 +54,4 @@ jobs:
           report: reports/report.html
           log: reports/log.html
           output: reports/output.xml
+
