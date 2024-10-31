@@ -1,16 +1,11 @@
-name: CI Pipeline
+name: Run Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +13,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Defina a versão do Python conforme necessário
+          python-version: '3.9'  # Use a versão que você preferir
 
       - name: Install dependencies
         run: |
@@ -26,13 +21,13 @@ jobs:
 
       - name: Run tests
         run: |
-          pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+          pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/ --loglevel DEBUG
 
-      - name: Upload results
-        uses: actions/upload-artifact@v3
-        with:
-          name: results
-          path: results/
+      - name: Check test results
+        run: |
+          echo "Checking test results..."
+          ls -la results  # Verificando os arquivos no diretório 'results'
+          cat results/output.xml  # Exibir o conteúdo do output.xml
 
   generate_report:
     runs-on: ubuntu-latest
@@ -40,22 +35,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: Download reports
         uses: actions/download-artifact@v3
         with:
-          name: results
-          path: results/
+          name: reports
+          path: reports/
 
       - name: Check downloaded files
         run: |
           echo "Checking downloaded reports..."
-          ls -la results  # Verificando os arquivos no diretório 'results'
+          ls -la reports  # Verificando os arquivos no diretório 'reports'
 
       - name: Send report to commit
         uses: joonvena/robotframework-reporter-action@v2.5
         with:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-          report: results/report.html
-          log: results/log.html
-          output: results/output.xml
+          report: reports/report.html
+          log: reports/log.html
+          output: reports/output.xml
