@@ -1,8 +1,8 @@
 # Bibliotecas necessárias para o projeto de automação com Robot Framework
 
-robotframework==7.1.1                    # Framework principal de automação
-robotframework-browser==18.9.1           # Biblioteca para automação de navegadores
-robotframework-faker==5.0.0              # Biblioteca para gerar dados falsos
-requests==2.26.0                         # Biblioteca para fazer requisições HTTP (se necessário)
-pytest==6.2.5                            # Biblioteca para testes adicionais
-robotframework-pabot==2.18.0             # Biblioteca para execução dos testes em paralelismo
+robotframework                   # Framework principal de automação
+robotframework-browser           # Biblioteca para automação de navegadores
+robotframework-faker             # Biblioteca para gerar dados falsos
+requests                         # Biblioteca para fazer requisições HTTP (se necessário)
+pytest                           # Biblioteca para testes adicionais
+robotframework-pabot             # Biblioteca para execução dos testes em paralelismo
