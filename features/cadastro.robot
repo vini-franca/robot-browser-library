@@ -1,7 +1,7 @@
 *** Settings ***
 Resource               ../resources/base.robot
-Suite Setup            Abrir navegador
-Suite Teardown         Close Browser
+Test Setup             Abrir navegador
+Test Teardown          Close Browser
 
 *** Test Cases ***
 CT-01 - Validar registro de usuário
