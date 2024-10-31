@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run tests
-        run: python3 -m pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+        run: pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
 
   generate_report:
     runs-on: ubuntu-latest
@@ -34,8 +34,8 @@ jobs:
       - name: Download reports
         uses: actions/download-artifact@v3
         with:
-          name: reports
-          path: reports/
+          name: results
+          path: results/
 
       - name: Check downloaded files
         run: |
