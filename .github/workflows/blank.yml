@@ -24,13 +24,42 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Setup Chrome and Chromedriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser chromium-chromedriver
+        chromium-browser --version
+        chromedriver --version
+
     - name: Run Robot Framework Tests
       run: |
-        pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+        pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true --loglevel DEBUG features/ || true
         
+    - name: Display error logs
+      if: always()
+      run: |
+        if [ -f "results/output.xml" ]; then
+          echo "=== Test Execution Logs ==="
+          python -c "
+          from robot.api import ExecutionResult
+          result = ExecutionResult('results/output.xml')
+          for test in result.suite.all_tests:
+              if test.status == 'FAIL':
+                  print(f'\n=== Failed Test: {test.name} ===')
+                  print(f'Message: {test.message}')
+                  print('Full Log:')
+                  for msg in test.body:
+                      print(f'- {msg}')
+          "
+        fi
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: robot-test-results
-        path: results/
+        path: |
+          results/
+          geckodriver.log
+          chromedriver.log
+          selenium-screenshot*.png
