@@ -23,20 +23,22 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Setup Chrome and Chromedriver
+        
+    - name: Setup Browser Library
       run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
-        chromium-browser --version
-        chromedriver --version
+        rfbrowser init
+        playwright install chromium
 
     - name: Run Robot Framework Tests
       run: |
-        pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true --loglevel DEBUG features/ || true
+        pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+      env:
+        # Configurações recomendadas para execução headless com Playwright
+        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+        BROWSER_TIMEOUT: "60 seconds"
         
-    - name: Display error logs
-      if: always()
+    - name: Parse log for failures
+      if: failure()
       run: |
         if [ -f "results/output.xml" ]; then
           echo "=== Test Execution Logs ==="
@@ -60,6 +62,11 @@ jobs:
         name: robot-test-results
         path: |
           results/
-          geckodriver.log
-          chromedriver.log
-          selenium-screenshot*.png
+          playwright-log.txt
+          browser/
+          results/browser/
+          log.html
+          output.xml
+          report.html
+          *.png
+          *.webm
