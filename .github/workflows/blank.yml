@@ -1,11 +1,13 @@
-name: Run Tests
+name: CI Pipeline
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,8 +20,32 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install robotframework-pabot
 
       - name: Run tests
+        run: pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+
+  generate_report:
+    runs-on: ubuntu-latest
+    needs: run-tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download reports
+        uses: actions/download-artifact@v3
+        with:
+          name: reports
+          path: reports/
+
+      - name: Check downloaded files
         run: |
-          pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+          echo "Checking downloaded reports..."
+          ls -la reports
+
+      - name: Send report to commit
+        uses: joonvena/robotframework-reporter-action@v2.5
+        with:
+          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+          report: reports/report.html
+          log: reports/log.html
+          output: reports/output.xml
