@@ -28,6 +28,7 @@ jobs:
           echo "Checking test results..."
           ls -la results  # Verificando os arquivos no diretório 'results'
           cat results/output.xml  # Exibir o conteúdo do output.xml
+          cat results/log.html  # Exibir o conteúdo do log.html
 
   generate_report:
     runs-on: ubuntu-latest
