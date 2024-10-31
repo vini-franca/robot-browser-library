@@ -21,7 +21,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/ --loglevel DEBUG
+          pabot --loglevel DEBUG --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
 
       - name: Check test results
         run: |
@@ -54,4 +54,3 @@ jobs:
           report: reports/report.html
           log: reports/log.html
           output: reports/output.xml
-
