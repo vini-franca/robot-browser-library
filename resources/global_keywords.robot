@@ -32,11 +32,6 @@ Inserir texto
     Wait For Elements State    ${ELEMENTO}    visible    ${TIMEOUT}
     Type Text                  ${ELEMENTO}    ${TEXTO}
 
-# Abrir navegador 
-#     New Browser   ${BROWSER}  headless=${BROWSER_MODE}   args=["--start-maximized"]
-#     New Context   viewport=${None}   
-#     New Page      ${URL}
-
 Abrir Navegador
     # Definindo o valor da variável BROWSER_MODE
     Set Variable If    '${BROWSER_MODE}' == ''    ${BROWSER_MODE}    true  # Defina como true se vazio

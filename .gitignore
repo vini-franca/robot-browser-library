@@ -1,11 +1,47 @@
+# Ignorar arquivos e pastas gerados pelo Pabot
 /.pabotsuitenames
+
+# Ignorar configurações do Visual Studio Code
 /.vscode
+
+# Ignorar diretório do navegador
 /browser
+
+# Ignorar arquivos de saída e logs gerados pelo Robot Framework e Playwright
 /interactive_console_output.xml
 /log.html
 /output.xml
-/playwright-log-1730120435695459900.txt
-/playwright-log-1730405394415633300.txt
+/playwright-log-*
 /playwright-log.txt
 /report.html
 /results
+
+# Ignorar arquivos de bytecode do Python
+__pycache__/
+*.py[cod]
+
+# Ignorar ambientes virtuais
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignorar arquivos de configuração do Python
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+
+# Ignorar arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db
+*.bak
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de cobertura
+.coverage
+.coverage.*
+*.hypothesis/
