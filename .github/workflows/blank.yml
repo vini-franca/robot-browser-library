@@ -59,13 +59,15 @@ jobs:
         name: robot-test-results
         path: results/
 
-    - name: Check downloaded files
+    - name: Verificar arquivos em results
       run: |
-        echo "Checking downloaded reports..."
+        echo "Verificando arquivos em results..."
         ls -la results/
 
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.5
       with:
         gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-        report_path: results/
+        report_path: results/report.html
+        sha: ${{ github.sha }}
+        summary: true
