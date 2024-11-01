@@ -19,59 +19,22 @@ jobs:
       with:
         python-version: '3.10'
         
-    - name: Install Python dependencies
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install robotframework-browser
-
+        pip install robotframework-browser robotframework-pabot
+        
     - name: Install Playwright
       run: |
-        python -m pip install playwright
+        pip install playwright
         python -m playwright install
-        python -m playwright install-deps
         
-    - name: Initialize Browser Library
-      run: rfbrowser init
-
     - name: Run Robot Framework Tests
       run: |
-        pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
-      env:
-        PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-        BROWSER_TIMEOUT: "60 seconds"
-        
-    - name: Parse log for failures
-      if: failure()
-      run: |
-        python3 << EOF
-import xml.etree.ElementTree as ET
-
-try:
-    tree = ET.parse('results/output.xml')
-    root = tree.getroot()
-
-    for suite in root.findall('.//suite'):
-        for test in suite.findall('.//test'):
-            status = test.find('status')
-            if status is not None and status.get('status') == 'FAIL':
-                print(f"\n=== Failed Test: {test.get('name')} ===")
-                
-                # Procura mensagens de erro
-                for msg in test.findall('.//msg'):
-                    if msg.get('level') in ['ERROR', 'FAIL']:
-                        print(f"Error Message: {msg.text}")
-                
-                # Tenta encontrar a keyword que falhou
-                for kw in test.findall('.//kw'):
-                    kw_status = kw.find('status')
-                    if kw_status is not None and kw_status.get('status') == 'FAIL':
-                        print(f"Failed Keyword: {kw.get('name')}")
-
-except Exception as e:
-    print(f"Error parsing XML: {e}")
-EOF
-
+        rfbrowser init
+        pabot --processes 3 --testlevelsplit --outputdir results features/
+      
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
@@ -79,11 +42,6 @@ EOF
         name: robot-test-results
         path: |
           results/
-          playwright-log.txt
-          browser/
-          results/browser/
-          log.html
-          output.xml
-          report.html
+          *.html
+          *.xml
           *.png
-          *.webm
