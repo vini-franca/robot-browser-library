@@ -14,11 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'  # Especifique a versão do Node.js necessária
-
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -40,9 +35,9 @@ jobs:
         fi
 
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
-        name: robot-test-results
+        name: reports
         path: reports/
 
   generate_report:
@@ -50,12 +45,12 @@ jobs:
     needs: run-tests
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Download reports
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v3
       with:
-        name: robot-test-results
+        name: reports
         path: reports/
 
     - name: Send report to commit
