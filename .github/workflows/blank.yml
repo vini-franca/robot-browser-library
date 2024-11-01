@@ -58,6 +58,6 @@ jobs:
       uses: joonvena/robotframework-reporter-action@v2.5
       with:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-          report_path: reports/
-          log_path: reports/
-          output_path: reports/
+          report: reports/report.html
+          log: reports/log.html
+          output: reports/output.xml
