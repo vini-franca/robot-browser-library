@@ -62,12 +62,12 @@ jobs:
     - name: Check downloaded files
       run: |
         echo "Checking downloaded reports..."
-        ls -la results/
+        ls -la results
 
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.5
       with:
-        gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-        report_path: results/
-        sha: ${{ github.sha }}
-        summary: true
+          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+          report: results/report.html
+          log: results/log.html
+          output: results/output.xml
