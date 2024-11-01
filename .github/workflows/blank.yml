@@ -44,20 +44,33 @@ jobs:
     - name: Parse log for failures
       if: failure()
       run: |
-        if [ -f "results/output.xml" ]; then
-          echo "=== Test Execution Logs ==="
-          python -c "
-          from robot.api import ExecutionResult
-          result = ExecutionResult('results/output.xml')
-          for test in result.suite.all_tests:
-              if test.status == 'FAIL':
-                  print(f'\n=== Failed Test: {test.name} ===')
-                  print(f'Message: {test.message}')
-                  print('Full Log:')
-                  for msg in test.body:
-                      print(f'- {msg}')
-          "
-        fi
+        python3 << EOF
+import xml.etree.ElementTree as ET
+
+try:
+    tree = ET.parse('results/output.xml')
+    root = tree.getroot()
+
+    for suite in root.findall('.//suite'):
+        for test in suite.findall('.//test'):
+            status = test.find('status')
+            if status is not None and status.get('status') == 'FAIL':
+                print(f"\n=== Failed Test: {test.get('name')} ===")
+                
+                # Procura mensagens de erro
+                for msg in test.findall('.//msg'):
+                    if msg.get('level') in ['ERROR', 'FAIL']:
+                        print(f"Error Message: {msg.text}")
+                
+                # Tenta encontrar a keyword que falhou
+                for kw in test.findall('.//kw'):
+                    kw_status = kw.find('status')
+                    if kw_status is not None and kw_status.get('status') == 'FAIL':
+                        print(f"Failed Keyword: {kw.get('name')}")
+
+except Exception as e:
+    print(f"Error parsing XML: {e}")
+EOF
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
