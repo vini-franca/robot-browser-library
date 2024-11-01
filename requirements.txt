@@ -6,3 +6,6 @@ robotframework-faker             # Biblioteca para gerar dados falsos
 requests                         # Biblioteca para fazer requisições HTTP (se necessário)
 pytest                           # Biblioteca para testes adicionais
 robotframework-pabot             # Biblioteca para execução dos testes em paralelismo
+robotframework-yamllibrary       # Biblioteca para interagir com arquivos .yaml
+playwright
+pyyaml
