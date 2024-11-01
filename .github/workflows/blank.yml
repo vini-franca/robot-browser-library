@@ -32,7 +32,7 @@ jobs:
     - name: Run Robot Framework Tests
       run: |
         rfbrowser init
-        pabot --processes 3 --testlevelsplit --variable BROWSER_MODE:true --outputdir results features/
+        pabot --processes 3 --testlevelsplit --variable BROWSER_MODE:true --outputdir reports features/
       
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -40,7 +40,7 @@ jobs:
       with:
         name: robot-test-results
         path: |
-          results/
+          reports/
           *.html
           *.xml
           *.png
@@ -57,17 +57,17 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: robot-test-results
-        path: results/
+        path: reports/
 
     - name: Check downloaded files
       run: |
         echo "Checking downloaded reports..."
-        ls -la results
+        ls -la reports
 
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.5
       with:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-          report: results/report.html
-          log: results/log.html
-          output: results/output.xml
+          report: reports/report.html
+          log: reports/log.html
+          output: reports/output.xml
