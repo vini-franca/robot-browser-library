@@ -28,6 +28,7 @@ jobs:
     - name: Run Robot Framework Tests
       run: |
         mkdir -p reports  # Criar diretório para relatórios
+        rfbrowser init
         pabot --processes 3 --testlevelsplit --variable BROWSER_MODE:true --outputdir reports features/
         if [ $? -ne 0 ]; then
           echo "Robot Framework tests failed. Check the logs for details."
