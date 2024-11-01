@@ -19,21 +19,25 @@ jobs:
       with:
         python-version: '3.10'
         
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
-    - name: Setup Browser Library
+        pip install robotframework-browser
+
+    - name: Install Playwright
       run: |
-        rfbrowser init
-        playwright install chromium
+        python -m pip install playwright
+        python -m playwright install
+        python -m playwright install-deps
+        
+    - name: Initialize Browser Library
+      run: rfbrowser init
 
     - name: Run Robot Framework Tests
       run: |
         pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
       env:
-        # Configurações recomendadas para execução headless com Playwright
         PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
         BROWSER_TIMEOUT: "60 seconds"
         
