@@ -56,7 +56,7 @@ jobs:
     - name: Download reports
       uses: actions/download-artifact@v4
       with:
-        name: robot-test-results
+        name: reports
         path: reports/
 
     - name: Check downloaded files
