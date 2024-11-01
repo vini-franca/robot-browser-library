@@ -23,16 +23,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install robotframework-browser robotframework-pabot pyyaml
         
     - name: Install Playwright and system dependencies
       run: |
-        pip install playwright
         python -m playwright install
         sudo apt-get update
     
     - name: Run Robot Framework Tests
       run: |
+        rfbrowser init
         pabot --processes 3 --testlevelsplit --variable BROWSER_MODE:true --outputdir results features/
       
     - name: Upload test results
