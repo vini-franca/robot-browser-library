@@ -10,45 +10,44 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Especifique a versão do Node.js necessária
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
-    - name: Install Playwright and system dependencies
-      run: |
         python -m playwright install
-        sudo apt-get update
-    
+
     - name: Run Robot Framework Tests
       run: |
-        rfbrowser init
+        mkdir -p reports  # Criar diretório para relatórios
         pabot --processes 3 --testlevelsplit --variable BROWSER_MODE:true --outputdir reports features/
-      
+        if [ $? -ne 0 ]; then
+          echo "Robot Framework tests failed. Check the logs for details."
+          exit 1
+        fi
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
-      if: always()
       with:
         name: robot-test-results
-        path: |
-          reports/
-          *.html
-          *.xml
-          *.png
+        path: reports/
 
   generate_report:
     runs-on: ubuntu-latest
     needs: run-tests
-    if: always()
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -59,15 +58,10 @@ jobs:
         name: robot-test-results
         path: reports/
 
-    - name: Check downloaded files
-      run: |
-        echo "Checking downloaded reports..."
-        ls -la reports
-
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.5
       with:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
-          report: reports/report.html
-          log: reports/log.html
-          output: reports/output.xml
+          report_path: reports/report.html
+          log_path: reports/log.html
+          output_path: reports/output.xml
