@@ -1,78 +1,129 @@
-# Projeto de Automação de Web - Browser Library
+# Projeto de Automação Mobile - Appium
 
-Este repositório contém a automação de testes Web utilizando o Robot Framework em conjunto com a **Browser Library**, ao invés da tradicional Selenium. A abordagem adotada visa melhorar a eficiência e a simplicidade dos testes de interface do usuário.
+[![Robot Framework](https://img.shields.io/badge/Robot_Framework-000000?style=for-the-badge&logo=robot-framework&logoColor=white)](https://robotframework.org/)
+[![Appium](https://img.shields.io/badge/Appium-0D2033?style=for-the-badge&logo=appium&logoColor=white)](https://appium.io/)
+
+Este repositório contém a automação de testes para aplicativos móveis utilizando o Robot Framework em conjunto com a **Appium Library**. A abordagem visa garantir a qualidade de funcionalidades críticas em dispositivos Android.
 
 ## 📚 Tecnologias Utilizadas
 
-- **Robot Framework**: Um framework de automação de testes de código aberto que utiliza uma abordagem de palavras-chave para facilitar a criação de testes.
-- **Browser Library**: Biblioteca que fornece uma interface para interação com elementos da web, permitindo ações como clique, preenchimento de formulários e navegação entre páginas.
-- **Pabot Library**: Biblioteca utilizada para execução paralela de testes em múltiplos navegadores simultaneamente, aumentando a eficiência da execução dos testes.
-
-## 📋 Estrutura dos Testes
-
-O projeto foi estruturado em cenários de teste que abrangem tanto cenários positivos quanto negativos, garantindo que diferentes aspectos da aplicação sejam testados de forma eficaz.
-
-### Cenários para a tela de Cadastro:
-- **CT-01**: Validar registro de usuário
-- **CT-02**: Validar cadastro de nome e sobrenome
-- **CT-03**: Cadastrar Shipping Address
+- **Robot Framework**: Framework de automação de testes de código aberto
+- **Appium Library**: Biblioteca para automação mobile
+- **Appium Server**: Gerenciador de sessões de teste
+- **Android SDK**: Configuração de ambientes mobile
 
 ## 🏗 Estrutura do Projeto
 
-A estrutura do projeto é organizada da seguinte maneira:
+```
+RF_appium/
+├── features/
+│   ├── login.robot
+│   ├── checkout.robot
+├── pages/
+│   ├── loginPage.robot
+│   ├── checkoutPage.robot
+├── resources/
+│   ├── app/
+│   └── app_loja.apk
+│   ├── lib/
+│   └── __pycache__/
+│   └── __init__.py
+│   └── DolEnv.py
+│   ├── utils/
+│   └── base.resource
+│   └── globalKeywords.resource
+│   └── openApp.resource 
+│   └── app.yaml  
+└── results/
+```
 
-- `features/`: Contém os arquivos de teste em Robot Framework.
-- `pages/`: Contém os arquivos com os xpaths e ID's dos elementos mapeados de cada página web.
-- `resources/`: Arquivos de suporte, como variáveis e bibliotecas.
-- `steps/`: Arquivos de implementação do BDD dos casos de testes.
+## 📦 Instalação
 
-## 📦 Instalação das Bibliotecas
-
-Para instalar as bibliotecas necessárias para o projeto, você pode usar o arquivo requirements.txt. Execute o seguinte comando:
-
+1. Clone o repositório:
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/vini-franca/RF_appium.git
+```
+
+2. Instale as dependências:
+```bash
+# Instalação do Poetry (caso não tenha)
+pip install poetry
+
+# Instalar todas as dependências do projeto
+poetry install
+```
+
+3. Instale o Appium globalmente:
+```bash
+npm install -g appium
+```
+
+## ⚙️ Configuração
+1. Configure as variáveis de ambiente no arquivo `resources/utils/base.resource` e `resources/utils/oppenApp.resource`:
+```robotframework
+*** Variables ***
+${PLATFORM_NAME}     android
+${DEVICE_NAME}       Pixel_4_API_30
+${APP_PACKAGE}       com.example.app
+```
+
+2. Inicie o servidor Appium:
+```bash
+appium --allow-insecure chromedriver_autodownload
 ```
 
 ## 🚀 Execução
-
-### Execução Local
-
-Para executar os testes localmente e salvar os resultados, utilize o seguinte comando:
-
+Teste Único (Android):
 ```bash
-robot features/cadastro.robot --outputdir results
+robot features/login.robot
 ```
 
-### Execução Paralela (Headless)
-
-Para executar os testes de forma paralela em modo headless, utilize o comando abaixo:
-
+Todos os Testes (Relatório HTML):
 ```bash
-pabot --processes 3 --testlevelsplit --outputdir results --variable BROWSER_MODE:true features/
+robot --outputdir reports --log log.html --report report.html features/
 ```
 
-### Execução Paralela (Modo Normal)
-
-Para executar os testes de forma paralela no modo normal, utilize o comando:
-
-```bash
-pabot --processes 3 --testlevelsplit --outputdir results --variable features/
+## 📊 Geração de Relatórios
+Relatórios automáticos são gerados em:
+```
+./results/
+├── log.html
+├── output.xml
+└── report.html
 ```
 
-## 📎 Links Úteis
+## 🔧 Troubleshooting
+**Problema comum**: Erro ao detectar dispositivos
+**Solução**:
+1. Verifique conexão ADB:
+```bash
+adb devices
+```
 
-- [Documentação do Robot Framework](https://robotframework.org/)
-- [Documentação da Browser Library](https://playwright.dev/python/docs/intro)
-- [Documentação do Pabot](https://pabot.org/)
+2. Reinicie o servidor Appium
+
+## 📎 Documentação
+* Guia Appium
+* Appium Library Documentation
+* Robot Framework Mobile Testing
+
+## 🤝 Contribuição
+1. Faça um fork do projeto
+2. Crie sua branch:
+```bash
+git checkout -b feature/nova-funcionalidade
+```
+
+3. Commit suas mudanças:
+```bash
+git commit -m 'Adiciona nova funcionalidade'
+```
+
+4. Push para a branch:
+```bash
+git push origin feature/nova-funcionalidade
+```
 
 ## 📬 Contato
 
-Para dúvidas ou sugestões, você pode me encontrar em:
-
-- [LinkedIn](https://www.linkedin.com/in/vinicius-ramos95/)
-- [GitHub](https://github.com/Vini-Franca)
-
----
-
-Agradeço por conferir o **Projeto de Automação de Web - Browser Library**. Sinta-se à vontade para contribuir ou abrir uma issue!
+**⭐️ Deixe uma estrela no repositório se achou útil!**
